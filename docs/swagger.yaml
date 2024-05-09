@@ -1,0 +1,466 @@
+definitions:
+  model.Job:
+    properties:
+      create_date:
+        type: string
+      description:
+        type: string
+      employer_id:
+        type: integer
+      id:
+        type: integer
+      requirement:
+        type: string
+      title:
+        type: string
+    type: object
+  request.InsertJobRequest:
+    properties:
+      description:
+        type: string
+      employer_id:
+        type: integer
+      requirement:
+        type: string
+      title:
+        type: string
+    type: object
+  request.UpdateApplicationStatusRequest:
+    properties:
+      application_id:
+        type: integer
+      employer_id:
+        type: integer
+      status:
+        type: integer
+    type: object
+  request.UserLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  request.UserRefreshTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+      role:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  request.UserRegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      role:
+        type: integer
+    type: object
+  response.AuthResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  response.ReadResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      time:
+        type: string
+    type: object
+  response.WriteResponse:
+    properties:
+      message:
+        type: string
+      time:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: job-portal
+  version: 1.0.0
+paths:
+  /application/{applicationId}:
+    get:
+      description: Retrieves an application by ID
+      parameters:
+      - description: Application ID
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+      summary: Get an application by ID
+      tags:
+      - Application
+    put:
+      description: Updates the status of an application in the database
+      parameters:
+      - description: Application ID
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: Update Application Status Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateApplicationStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+      summary: Update the status of an application
+      tags:
+      - Application
+  /job:
+    post:
+      description: Inserts a new job into the database
+      parameters:
+      - description: Job data
+        in: body
+        name: job
+        required: true
+        schema:
+          $ref: '#/definitions/request.InsertJobRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+      summary: Insert a new job
+      tags:
+      - Job
+  /job/{jobId}:
+    get:
+      description: Retrieves a job by ID
+      parameters:
+      - description: Job ID
+        in: path
+        name: jobId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+      summary: Get a job by ID
+      tags:
+      - Job
+    post:
+      description: Inserts a new application into the database
+      parameters:
+      - description: Job ID
+        in: path
+        name: jobId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+      summary: Apply for the Job
+      tags:
+      - Job
+  /job/{jobId}/applications:
+    get:
+      description: Retrieves applications for a specific job
+      parameters:
+      - description: Job ID
+        in: path
+        name: jobId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+      summary: Get applications by Job ID
+      tags:
+      - Application
+  /jobs:
+    get:
+      description: Retrieves all jobs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Job'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+      summary: Get all jobs
+      tags:
+      - Job
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and returns access and refresh tokens
+      parameters:
+      - description: User Login Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+      summary: User Login
+      tags:
+      - Authentication
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Logs out a user by invalidating the access token
+      parameters:
+      - description: Access Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+      summary: User Logout
+      tags:
+      - Authentication
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: Used for Health Check"
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Pong!
+          schema:
+            type: string
+      summary: Ping endpoint
+      tags:
+      - Ping
+  /refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refreshes the access token using a refresh token
+      parameters:
+      - description: Refresh Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Refresh Token Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserRefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.WriteResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+      summary: Refresh Access Token
+      tags:
+      - Authentication
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user and returns access and refresh tokens
+      parameters:
+      - description: User Registration Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ReadResponse'
+      summary: User Registration
+      tags:
+      - Authentication
+swagger: "2.0"

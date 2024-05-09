@@ -1,0 +1,16 @@
+# ignore all logs
+**/logs
+
+# ignore local config
+application_config.json
+
+# ignore bin
+**/bin
+job-portal
+job-portal.exe
+
+# ignore vendor
+**/vendor
+
+# ignore aws install script
+install.sh

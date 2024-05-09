@@ -1,0 +1,23 @@
+{
+  "port": {
+    "service": 2000,
+    "servicetimeout": 5,
+    "basepath": "/"
+  },
+  "database": {
+    "dbname": "job_portal",
+    "host": "localhost",
+    "port": "5432",
+    "user": "root",
+    "password": "root",
+    "timeout": 60
+  },
+  "jwt" :{
+    "access_token_duration": 15,
+    "refresh_token_duration": 360,
+    "secret_key" : "change-to-your-secret-key"
+  },
+  "encrypt":{
+    "secretkey": "change-to-your-secret-key"
+  }
+}
